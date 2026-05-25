@@ -1,18 +1,4 @@
 ---
-import { getCollection } from "astro:content";
-import Posts from "@layouts/Posts.astro";
-import getSortedPosts from "@utils/getSortedPosts";
-import getPagination from "@utils/getPagination";
-
-const posts = await getCollection("blog");
-
-const sortedPosts = getSortedPosts(posts);
-
-const pagination = getPagination({
-  posts: sortedPosts,
-  page: 1,
-  isIndex: true,
-});
+// Redirecciono a la raíz para que sea la utilizada para ver los posts
+return Astro.redirect('/');
 ---
-
-<Posts {...pagination} />

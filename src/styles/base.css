@@ -98,6 +98,27 @@
   .prose h2#table-of-contents + p {
     @apply hidden;
   }
+  /* Wrapper que permite que el badge sobresalga */
+  pre:has(code) {
+    @apply relative border border-skin-line;
+    overflow: visible !important;
+  }
+
+  /* El scroll horizontal va en el <code>, no en el <pre> */
+  pre > code {
+    display: block;
+    overflow-x: auto;
+    white-space: pre;
+  }
+
+  .prose pre {
+    overflow: visible !important;
+  }
+
+  /* Si hay nombre de archivo, agregamos un pequeño espacio */
+  pre.mt-8:has(code) {
+  padding-top: 1.2rem;
+}
 
   /* ===== scrollbar ===== */
   html {
@@ -126,15 +147,23 @@
 
   /* ===== Code Blocks & Syntax Highlighting ===== */
   pre:has(code) {
-    @apply border border-skin-line;
+    @apply relative border border-skin-line overflow-visible;
   }
   code,
   blockquote {
     word-wrap: break-word;
   }
-
   pre > code {
     white-space: pre;
+  }
+
+  html[data-theme="dark"] pre:has(code),
+  html[data-theme="dark"] pre:has(code) span {
+    color: var(--shiki-dark) !important;
+    background-color: #101212 !important;
+    font-style: var(--shiki-dark-font-style) !important;
+    font-weight: var(--shiki-dark-font-weight) !important;
+    text-decoration: var(--shiki-dark-text-decoration) !important;
   }
 
   /* Apply Dark Theme (if multi-theme specified) */
@@ -146,6 +175,12 @@
     font-weight: var(--shiki-dark-font-weight) !important;
     text-decoration: var(--shiki-dark-text-decoration) !important;
   }
+}
+
+/* Para que no se corte el code block */
+pre:has(code) {
+  @apply relative border border-skin-line;
+  overflow: visible !important;
 }
 
 @layer components {

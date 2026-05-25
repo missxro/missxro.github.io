@@ -31,7 +31,7 @@ Como vemos en la imagen, el demonio **auditd** será el encargado de enviar los 
 Será necesario aplicar las reglas que veamos pertinentes dentro de la configuración del demonio **auditd**, ubicada en `/etc/audit/rules.d/`. 
 
 Ejemplo de fichero:
-```bash
+```bash file="/etc/audit/rules.d/99-azure-monitor.rules"
 # Limpiar reglas previas
 -D
 
@@ -99,8 +99,8 @@ Para no sobrecargar los logs con esos procesos automáticos, no los mostramos.
 
 ## Paso 2: Configuración de audisp
 Una vez que auditd ya está registrando los eventos, tendremos que activar el *dispatcher* o emisor de logs de Audit llamado **audisp**. Este *plugin* nos permitirá reenviar los eventos recogidos por audit hacia **syslog**.
-Para ello, lo configuramos dentro de `/etc/audit/plugins.d/syslog.conf`:
-```bash
+Para ello, lo configuramos dentro de `/etc/audit/plugins.d`:
+```bash file="/etc/audit/plugins.d/syslog.conf"
 active = yes
 direction = out
 path =  /sbin/audisp-syslog
@@ -119,10 +119,10 @@ A continuación, desgloso cada una de las directivas:
 
 ## Paso 3: Filtrar syslog
 Opcionalmente, podemos filtrar eventos que no queremos que aparezcan en nuestro rsyslog dentro de `/etc/rsyslog.d`.
-Es importante que los filtros se apliquen antes de la configuración del AMA, en mi caso antes de `10-azuremonitoragent-omfwd.conf`. El nombre de un posible archivo de configuración podría ser `01-filter-audit.conf`.
+Es importante que los filtros se apliquen antes de la configuración del AMA, en mi caso antes de `10-azuremonitoragent-omfwd.conf`.
 
 Ejemplo:
-```bash
+```bash file="/etc/rsyslog.d/01-filter-audit.conf"
 # End of Event, indica el final de un evento auditd. No nos proporciona info útil
 if $msg contains "type=EOE" then stop
 # Current Working Directory, indica el directorio donde se ejecuta algo. Genera mucho ruido
