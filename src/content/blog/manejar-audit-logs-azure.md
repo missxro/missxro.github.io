@@ -1,6 +1,6 @@
 ---
 author: Rocío del Pilar Felipe
-pubDatetime: 2026-05-25T08:44:00Z
+pubDatetime: 2026-05-25T06:33:00Z
 title: Cómo enviar logs de Audit a Azure Log Workspace
 slug: manejar-audit-logs-azure
 featured: true
