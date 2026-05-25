@@ -128,7 +128,11 @@ const { activeNav } = Astro.props;
     @apply relative flex w-full items-start justify-between p-4 sm:items-center sm:py-3;
   }
   .logo {
-    @apply absolute py-1 text-xl font-semibold sm:static sm:text-2xl;
+    @apply absolute top-1/2 -translate-y-1/2 py-1 text-xl font-semibold sm:static sm:translate-y-0 sm:text-2xl;
+  }
+    /* Cuando el menú está abierto, ancla el logo arriba-izquierda */
+  .logo.menu-open {
+    @apply top-0 translate-y-0;
   }
   .hamburger-menu {
     @apply self-end p-2 sm:hidden;
@@ -196,6 +200,7 @@ const { activeNav } = Astro.props;
     const menuBtn = document.querySelector(".hamburger-menu");
     const menuIcon = document.querySelector(".menu-icon");
     const menuItems = document.querySelector("#menu-items");
+    const logo      = document.querySelector(".logo");
 
     menuBtn?.addEventListener("click", () => {
       const menuExpanded = menuBtn.getAttribute("aria-expanded") === "true";
@@ -206,6 +211,7 @@ const { activeNav } = Astro.props;
         menuExpanded ? "Open Menu" : "Close Menu"
       );
       menuItems?.classList.toggle("display-none");
+      logo?.classList.toggle("menu-open");
     });
   }
 
