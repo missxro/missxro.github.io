@@ -10,7 +10,7 @@ tags:
   - logs
   - audit
 description:
-  En este blog exploraremos la capacidad de analizar los logs generados por el demonio auditd de una VM dentro de Azure en "Áreas de trabajo de Log Analytics / Log Analytics Workspace", de manera que podamos crear alertas y monitorizar de manera activa lo que ocurre en nuestra máquina.
+  En este blog exploraremos la capacidad de analizar los logs generados por el demonio auditd de una VM dentro de Azure en "Áreas de trabajo de Log Analytics / Log Analytics Workspace".
 ---
 
 ## Table of Contents
