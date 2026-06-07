@@ -32,7 +32,7 @@ const { currentPage, totalPages, paginatedPosts } = Astro.props;
   <Pagination
     {currentPage}
     {totalPages}
-    prevUrl={`/posts${currentPage - 1 !== 1 ? "/" + (currentPage - 1) : ""}/`}
+    prevUrl={`/posts${currentPage - 1 === 1 ? "/" + (currentPage - 1) : ""}/`}
     nextUrl={`/posts/${currentPage + 1}/`}
   />
 

@@ -1,6 +1,6 @@
 ---
 author: Rocío del Pilar Felipe
-pubDatetime: 2026-06-05T17:18:00Z
+pubDatetime: 2026-06-04T17:18:00Z
 title: Gestión de usuarios y grupos en OpenVPN Community
 slug: gestion-usuarios-grupos-openvpn
 featured: true
