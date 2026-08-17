@@ -1,6 +1,6 @@
 ---
 author: Rocío del Pilar Felipe
-pubDatetime: 2026-08-17T19:40:00Z
+pubDatetime: 2026-08-17T08:00:00Z
 title: "Escaneo de vulnerabilidades con Trivy via Ansible"
 slug: escaneo-de-vulnerabilidades-con-trivy
 featured: true
