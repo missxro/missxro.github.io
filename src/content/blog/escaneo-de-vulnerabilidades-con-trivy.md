@@ -19,8 +19,8 @@ description: Cómo inventariar vulnerabilidades de varias VMs Linux con Trivy y 
 
 Inventariar las vulnerabilidades de **varias VMs Linux** cumpliendo estas dos condiciones:
 
-- **Agentless**: No queremos instalar nada permanente en los hosts.
-- **Carga de trabajo mínima**: El escaneo debe suponer poca carga para el hardware de los servidores. Esto es especialmente útil en el caso de que estemos hablando de **servidores en producción**.
+- **Agentless**: No instala nada permanente en los hosts.
+- **Carga de trabajo mínima**: El escaneo supone poca carga para el hardware de los servidores. Esto es especialmente útil en el caso de que estemos hablando de **servidores en producción**.
 
 ## Antes de empezar; ¿qué es Trivy?
 
@@ -29,13 +29,6 @@ Es un **escáner de vulnerabilidades** que compara los paquetes instalados de un
 ### Workflow
 
 El flujo de trabajo simplificado que seguirá la utilidad en cada nodo es el siguiente:
-```
-Ansible
-├── copia el binario Trivy y base de datos de vulns
-├── ejecuta el análisis
-├── recupera el JSON
-└── elimina el rastro
-```
 
 ![Workflow ilustrado. Ansible copia el binario Trivy y BD de vulns -> Ejecuta el análisis -> Recupera el JSON -> Elimina el rastro](/images/escaneo-de-vulnerabilidades-con-trivy/workflow.webp)
 
@@ -115,7 +108,10 @@ Deberíamos tener los archivos:
 - `metadata.json`: Contiene fechas referentes a la base de datos.
 - `trivy.db`: Base de datos con la info que Trivy utiliza para comparar los paquetes instalados con vulns conocidas.
 
-Estos dos archivos serán copiados a los servidores destino y posteriormente eliminados. Por ello, debemos **asegurarnos de que tengan espacio suficiente** en disco.* Si esto es un problema en tu entorno, en **la sección <a href="#alternativa-modo-clienteservidor" >Alternativa: modo cliente/servidor**</a> te presento otra manera de hacerlo.
+Estos dos archivos serán copiados a los servidores destino y posteriormente eliminados. Por ello, debemos **asegurarnos de que tengan espacio suficiente** en disco.
+
+Si esto es un problema en tu entorno, en **la sección <a href="#alternativa-modo-clienteservidor" >Alternativa: modo cliente/servidor**</a> te presento otra manera de hacerlo.
+
 ![Database descargada y su peso](/images/escaneo-de-vulnerabilidades-con-trivy/trivy-cache.webp)
 
 ## Paso 4: Crear el playbook
@@ -257,10 +253,14 @@ ansible-playbook -i inventory.ini trivy-scan.yml
 
 En este *runbook* copiamos el binario y BD en cada host para simplificar el proceso de auditoría. Si hablamos de muchos *targets*, esto puede resultar un problema.
 
-Para ello, está el modo **cliente/servidor de Trivy**, en el cual la BD se queda en el control node y el cliente analiza el file system, extrae el inventario de paquetes instalados y lo envía al servidor, que es el que finalmente compara los datos obtenidos. **Solo se copiaría el binario**.
+Para ello, está el modo **cliente/servidor de Trivy**; la BD se queda en el control node y el cliente:
+- Analiza el file system
+- Extrae el inventario de paquetes instalados
+- Lo envía al servidor, que es el que finalmente compara los datos obtenidos.
+Durante este proceso, **solo se copiaría el binario**.
 
-Es el mismo binario utilizando la directiva `server`, sin embargo, necesitas cumplir una serie de requisitos:
-- **Conectividad**: Hasta ahora sólo hacía falta control `node -> host` por SSH gracias a Ansible. Ahora también `host -> control node` por TCP al puerto del servidor.
+Es el mismo binario utilizado pero con la directiva `server`, sin embargo, necesitas cumplir una serie de requisitos:
+- **Conectividad**: Hasta ahora sólo hacía falta control `node -> host` por SSH gracias a Ansible. Ahora también `host -> control node` por TCP.
 - **Autenticación**: El servidor escucha en la red mientras dura el escaneo (directiva `--token` necesaria).
 - **Proceso independiente**: Hay que arrancar y parar el servidor aparte; si el proceso muere o el playbook se interrumpe a medias, se queda escuchando en el control node.
 - **Sigue haciendo falta `--cache-dir`**: El cliente escribe una caché local en el host analizado y por defecto la deja en `~/.cache/trivy`. Debe seguir apuntando al directorio temporal para que la limpieza se la lleve.
